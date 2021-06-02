@@ -6,10 +6,8 @@ import com.dtn.app.service.LightningService;
 
 import java.util.Scanner;
 
-/**
- * Hello world!
- *
- */
+import static com.dtn.app.constants.AppConstants.*;
+
 public class LightningApp {
     private boolean stayInMenu;
     private String userInput;
@@ -26,12 +24,12 @@ public class LightningApp {
     public static void main( String[] args ) {
         LightningApp lightningApp = new LightningApp();
 
-        System.out.print("\nLightning App Program\n");
+        System.out.print(APP_NAME);
         while (lightningApp.stayInMenu) {
             lightningApp.showMenu(AppConstants.MENU);
-            if (lightningApp.userInput.equalsIgnoreCase("x")) {
+            if (lightningApp.userInput.equalsIgnoreCase(MENU_EXIT)) {
                 lightningApp.stayInMenu = false;
-            } else if (lightningApp.userInput.equalsIgnoreCase("a")) {
+            } else if (lightningApp.userInput.equalsIgnoreCase(MENU_PROCEED)) {
                 LightningService lightningService = new LightningService(lightningApp.assetsDao);
                 lightningService.handleLightningData();
                 lightningApp.stayInMenu = true;
@@ -41,7 +39,7 @@ public class LightningApp {
         }
     }
 
-    public void showMenu (String display) {
+    private void showMenu (String display) {
         System.out.print(display);
         this.userInput = (this.input.nextLine()).trim();
         if (this.userInput.length() == 0) {

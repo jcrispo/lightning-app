@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Scanner;
 
 import static com.dtn.app.constants.AppConstants.INVALID_LIGHTNING_DATA;
+import static com.dtn.app.constants.AppConstants.LIGHTNING_DATA_SKIPPED;
 
 public class UserInputService {
     private Scanner dataIn;
@@ -34,7 +35,7 @@ public class UserInputService {
                 lightningStrikeList.add(lightningStrike);
             } catch(Exception e) {
                 System.out.println(INVALID_LIGHTNING_DATA + "for user input: " + userInput);
-                System.out.println("Data will be skipped.");
+                System.out.println(LIGHTNING_DATA_SKIPPED);
             }
         }
 
