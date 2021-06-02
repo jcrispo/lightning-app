@@ -16,6 +16,22 @@ public class LightningStrike {
     private Integer numberOfSensors;
     private Integer multiplicity;
 
+    @Override
+    public String toString() {
+        return "LightningStrike{" +
+                "flashType=" + flashType +
+                ", strikeTime=" + strikeTime +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                ", peakAmps=" + peakAmps +
+                ", reserved='" + reserved + '\'' +
+                ", icHeight=" + icHeight +
+                ", receivedTime=" + receivedTime +
+                ", numberOfSensors=" + numberOfSensors +
+                ", multiplicity=" + multiplicity +
+                '}';
+    }
+
     public LightningStrike(Map<String, Object> data) {
         flashType = MapUtility.getMapIntegerValue(data, "flashType");
         strikeTime = MapUtility.getMapLongValue(data, "strikeTime");

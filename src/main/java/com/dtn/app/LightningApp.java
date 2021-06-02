@@ -33,7 +33,7 @@ public class LightningApp {
                 lightningApp.stayInMenu = false;
             } else if (lightningApp.userInput.equalsIgnoreCase("a")) {
                 LightningService lightningService = new LightningService(lightningApp.assetsDao);
-                lightningService.handleLightningData(lightningApp.userInput);
+                lightningService.handleLightningData();
                 lightningApp.stayInMenu = true;
             } else {
                 System.out.println(AppConstants.MENU_SELECT_CHOICE);

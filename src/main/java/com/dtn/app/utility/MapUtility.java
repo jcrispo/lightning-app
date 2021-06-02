@@ -4,6 +4,8 @@ import java.util.Map;
 
 public class MapUtility {
 
+    private MapUtility() {}
+
     public static Integer getMapIntegerValue(Map<String, Object> data, String key) {
         Float val = getMapFloatValue(data, key);
         return val == null ? null : val.intValue();

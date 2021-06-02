@@ -1,6 +1,5 @@
 package com.dtn.app.utility;
 
-import com.google.gson.Gson;
 import org.apache.commons.io.IOUtils;
 
 import java.io.*;

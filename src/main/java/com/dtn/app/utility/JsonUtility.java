@@ -9,6 +9,8 @@ import java.util.Map;
 
 public class JsonUtility {
 
+    private JsonUtility() {}
+
     /**
      * Takes a JSON String and returns a {@code List<Map<String, Object>>}
      *
