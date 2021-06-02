@@ -8,8 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-import static com.dtn.app.constants.AppConstants.INVALID_LIGHTNING_DATA;
-import static com.dtn.app.constants.AppConstants.LIGHTNING_DATA_SKIPPED;
+import static com.dtn.app.constants.AppConstants.*;
 
 public class UserInputService {
     private Scanner dataIn;
@@ -24,7 +23,7 @@ public class UserInputService {
         System.out.println(print);
         while (dataIn.hasNext()) {
             String userInput = dataIn.nextLine().trim();
-            if ("d".equalsIgnoreCase(userInput)) break;
+            if (EXIT_USER_INPUT.equalsIgnoreCase(userInput)) break;
 
             try {
                 Map<String, Object> lightningDataMap = JsonUtility.fromJsonToMap(userInput);
@@ -34,7 +33,7 @@ public class UserInputService {
                 LightningStrike lightningStrike = new LightningStrike(lightningDataMap);
                 lightningStrikeList.add(lightningStrike);
             } catch(Exception e) {
-                System.out.println(INVALID_LIGHTNING_DATA + "for user input: " + userInput);
+                System.out.println(INVALID_LIGHTNING_DATA + userInput);
                 System.out.println(LIGHTNING_DATA_SKIPPED);
             }
         }
