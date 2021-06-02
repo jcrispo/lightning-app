@@ -31,9 +31,9 @@ public class LightningApp {
             lightningApp.showMenu(AppConstants.MENU);
             if (lightningApp.userInput.equalsIgnoreCase("x")) {
                 lightningApp.stayInMenu = false;
-            } else if (lightningApp.userInput.equalsIgnoreCase("x")) {
-                LightningService lightningService = new LightningService();
-                lightningService.handleLightningData(lightningApp.userInput, lightningApp.assetsDao);
+            } else if (lightningApp.userInput.equalsIgnoreCase("a")) {
+                LightningService lightningService = new LightningService(lightningApp.assetsDao);
+                lightningService.handleLightningData(lightningApp.userInput);
                 lightningApp.stayInMenu = true;
             } else {
                 System.out.println(AppConstants.MENU_SELECT_CHOICE);
