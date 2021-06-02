@@ -4,14 +4,13 @@ import com.dtn.app.constants.AppConstants;
 import com.dtn.app.dao.AssetsDao;
 import com.dtn.app.model.Asset;
 import com.dtn.app.model.LightningStrike;
-import com.dtn.app.utility.FileUtility;
-import com.dtn.app.utility.JsonUtility;
 import org.geotools.tile.impl.bing.BingTileUtil;
 
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
-import static com.dtn.app.constants.AppConstants.LIGHTNING_ALERT;
-import static com.dtn.app.constants.AppConstants.LIGHTNING_NO_HIT;
+import static com.dtn.app.constants.AppConstants.*;
 
 public class LightningService {
     private AssetsDao assetsDao;
@@ -23,34 +22,25 @@ public class LightningService {
     }
 
     public void handleLightningData() {
-        LightningStrike lightning = userInputService.getValidLightningData("Enter a lightning strike data: ");
+        List<LightningStrike> lightningList = userInputService.getValidLightningData(MENU_INPUT_DATA_CHOICE);
         Map<String, Asset> assetsMap = assetsDao.getAssetsMap();
+
+        for (LightningStrike lightning : lightningList) {
+            checkLightningHitsOnAssets(assetsMap, lightning);
+        }
+    }
+
+    private void checkLightningHitsOnAssets(Map<String, Asset> assetsMap, LightningStrike lightning) {
         String lightningQuadKey = BingTileUtil.lonLatToQuadKey(lightning.getLongitude(), lightning.getLatitude(), AppConstants.ZOOM_LEVEL);
+        Set<String> assetsAlreadyHit = this.assetsDao.getAssetQuadKeyHits();
+
+        if (assetsAlreadyHit.contains(lightningQuadKey) || lightning.getFlashType().intValue() != FLASHTYPE_GROUND) return;
+
         Asset assetHit = assetsMap.get(lightningQuadKey);
         if (assetHit != null) {
             System.out.println(String.format(LIGHTNING_ALERT, assetHit.getAssetOwner().toString(), assetHit.getAssetName()));
-        } else {
-            System.out.println(LIGHTNING_NO_HIT);
+            this.assetsDao.addToQuadKeysHit(lightningQuadKey);
         }
-
-        //Testing
-        /*
-        FileUtility lightningFile = new FileUtility("/lightning-sample.json");
-        List<Map<String, Object>> lightningList = JsonUtility.fromJsonToListOfMap(lightningFile.getFileAsJsonString());
-        for (Map<String, Object> lightningMap : lightningList) {
-            LightningStrike lightningStrike = new LightningStrike(lightningMap);
-            String quadKey = BingTileUtil.lonLatToQuadKey(lightningStrike.getLongitude(), lightningStrike.getLatitude(), AppConstants.ZOOM_LEVEL);
-            System.out.println("quadKey Value: " + quadKey);
-            Asset asset = assetsMap.get(quadKey);
-            if (asset != null) {
-                System.out.println("Lightning: " + lightningStrike.toString());
-                System.out.println("Asset: " + asset.toString());
-            } else {
-                System.out.println("Lightning did not hit any asset.");
-            }
-        }
-         */
-
     }
 }
 

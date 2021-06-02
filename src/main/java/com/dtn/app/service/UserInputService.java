@@ -1,37 +1,43 @@
 package com.dtn.app.service;
 
-import com.dtn.app.constants.AppConstants;
 import com.dtn.app.model.LightningStrike;
 import com.dtn.app.utility.JsonUtility;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
+import static com.dtn.app.constants.AppConstants.INVALID_LIGHTNING_DATA;
+
 public class UserInputService {
     private Scanner dataIn;
-    private boolean dataIsValid;
 
     public UserInputService() {
         dataIn = new Scanner(System.in);
-        dataIsValid = false;
     }
 
-    public LightningStrike getValidLightningData(String print) {
-        LightningStrike lightningStrike = null;
-        while (!dataIsValid) {
-            System.out.print(print);
-            String tempString = dataIn.nextLine().trim();
+    public List<LightningStrike> getValidLightningData(String print) {
+        List<LightningStrike> lightningStrikeList = new ArrayList<>();
+
+        System.out.println(print);
+        while (dataIn.hasNext()) {
+            String userInput = dataIn.nextLine().trim();
+            if ("d".equalsIgnoreCase(userInput)) break;
+
             try {
-                Map<String, Object> lightningDataMap = JsonUtility.fromJsonToMap(tempString);
-                lightningStrike = new LightningStrike(lightningDataMap);
-                dataIsValid = true;
+                Map<String, Object> lightningDataMap = JsonUtility.fromJsonToMap(userInput);
+
+                if (lightningDataMap == null || lightningDataMap.isEmpty()) throw new IllegalArgumentException(INVALID_LIGHTNING_DATA);
+
+                LightningStrike lightningStrike = new LightningStrike(lightningDataMap);
+                lightningStrikeList.add(lightningStrike);
             } catch(Exception e) {
-                System.out.println(AppConstants.INVALID_LIGHTNING_DATA);
-                dataIsValid = false;
+                System.out.println(INVALID_LIGHTNING_DATA + "for user input: " + userInput);
+                System.out.println("Data will be skipped.");
             }
         }
-        dataIsValid = false;
 
-        return lightningStrike;
+        return lightningStrikeList;
     }
 }
